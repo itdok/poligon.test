@@ -19,7 +19,7 @@ class CreateBlogPostsTable extends Migration
             $table->integer('category_id')->unsigned();
             $table->integer('user_id')->unsigned();
 
-            $table->string('slag')->unique();
+            $table->string('slug')->unique();
             $table->string('title');
 
             $table->text('excerpt')->nullable();
@@ -28,7 +28,7 @@ class CreateBlogPostsTable extends Migration
             $table->text('content_html');
 
             $table->boolean('is_published')->default(false);
-            $table->boolean('published_at')->nullable();
+            $table->timestamp('published_at')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
