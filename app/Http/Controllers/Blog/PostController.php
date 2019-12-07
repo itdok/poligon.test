@@ -16,8 +16,6 @@ class PostController extends BaseController
     {
         $items = BlogPost::all();
 
-//        dd($items->first());
-
         return view('blog.post.index', compact('items'));
     }
 
