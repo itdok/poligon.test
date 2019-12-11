@@ -35,7 +35,7 @@
                             <select name="parent_id"
                                     id="parent_id"
                                     class="form-control"
-                                    placeholder="выберете категорию"
+                                    placeholder="Выберете категорию"
                                     required>
                                 @foreach($categoryList as $categoryOption)
                                     <option value="{{ $categoryOption->id }}"
@@ -51,9 +51,7 @@
                             <textarea name="description"
                                       id="description"
                                       class="form-control"
-                                      rows="3">
-                                {{ $item->description }}
-                            </textarea>
+                                      rows="3">{{ old('description', $item->description) }}</textarea>
                         </div>
                     </div>
                 </div>
