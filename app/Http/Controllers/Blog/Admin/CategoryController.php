@@ -2,13 +2,29 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
-use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Http\Requests\BlogCategoryCreateRequest;
+use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\BlogCategory;
 use App\Repositories\BlogCategoryRepository;
 
+/**
+ * Управление категориями блога
+ *
+ * @package App\Http\Controllers\Blog\Admin
+ */
 class CategoryController extends BaseController // Blog/Admin/BaseController.php
 {
+    /**
+     * @var BlogCategoryRepository
+     */
+    private $blogCategoryRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->blogCategoryRepository = app(BlogCategoryRepository::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,10 +32,10 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
      */
     public function index()
     {
-        $paginator = BlogCategory::paginate(5);
+//        $paginator = BlogCategory::paginate(5);
+        $paginator = $this->blogCategoryRepository->getAllWithPaginate(5);
 
-        return  view('blog.admin.categories.index',
-            compact('paginator'));
+        return  view('blog.admin.categories.index', compact('paginator'));
     }
 
     /**
@@ -30,7 +46,8 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
     public function create()
     {
         $item = new BlogCategory();
-        $categoryList = BlogCategory::all();
+        $categoryList
+            = $this->blogCategoryRepository->getForComboBox();
 
         return view('blog.admin.categories.edit',
         compact('item', 'categoryList'));
@@ -49,20 +66,15 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
             $data['slug'] = str_slug($data['title']);
         }
 
-//        $item = new BlogCategory($data); // Создаст объект но не добавит в db
-//        $item->save();                   // Сохранит в db
-
-        // Создаст объект но не добавит в db
+        // Создаст объект и добавит в db
         $item = (new BlogCategory())->create($data);
 
         if ($item) {
-            return redirect()
-                ->route('blog.admin.categories.edit', [$item->id])
-                ->with(['success' => 'Успешно сохранено']);
+            return redirect()->route('blog.admin.categories.edit', [$item->id])
+                             ->with(['success' => 'Успешно сохранено']);
         } else {
-            return back()
-                ->withErrors(['msg' => 'Ошибка сохранения'])
-                ->withInput();
+            return back()->withErrors(['msg' => 'Ошибка сохранения'])
+                         ->withInput();
         }
     }
 
@@ -86,14 +98,11 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
      */
     public function edit($id, BlogCategoryRepository $categoryRepository)
     {
-//        $item = BlogCategory::findOrFail($id);
-//        $categoryList = BlogCategory::all();
-
-        $item = $categoryRepository->getEdit($id);
+        $item = $this->blogCategoryRepository->getEdit($id);
         if (empty($item)) {
             abort(404);
         }
-        $categoryList = $categoryRepository->getForComboBox();
+        $categoryList = $this->blogCategoryRepository->getForComboBox();
 
         return  view('blog.admin.categories.edit',
             compact('item', 'categoryList'));
@@ -108,7 +117,7 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
      */
     public function update(BlogCategoryUpdateRequest $request, $id)
     {
-        $item = BlogCategory::find($id);
+        $item = $this->blogCategoryRepository->getEdit($id);
         if (empty($item)) {
             return back()
                 ->withErrors(['msg' => "Запись id=[{$id}] не найдена"])
@@ -120,9 +129,7 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
             $data['slug'] = str_slug($data['title']);
         }
 
-//        $result = $item->fill($data)->save();
         $result = $item->update($data); // тот же результат что и выше
-
 
         if ($result) {
             return redirect()
