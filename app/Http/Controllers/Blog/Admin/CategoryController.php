@@ -12,7 +12,7 @@ use App\Repositories\BlogCategoryRepository;
  *
  * @package App\Http\Controllers\Blog\Admin
  */
-class CategoryController extends BaseController // Blog/Admin/BaseController.php
+class CategoryController extends BaseController
 {
     /**
      * @var BlogCategoryRepository
@@ -78,16 +78,16 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        dd(__METHOD__);
-    }
+//    /**
+//     * Display the specified resource.
+//     *
+//     * @param  int  $id
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function show($id)
+//    {
+//        dd(__METHOD__);
+//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -142,14 +142,14 @@ class CategoryController extends BaseController // Blog/Admin/BaseController.php
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        dd(__METHOD__);
-    }
+//    /**
+//     * Remove the specified resource from storage.
+//     *
+//     * @param  int  $id
+//     * @return \Illuminate\Http\Response
+//     */
+//    public function destroy($id)
+//    {
+//        dd(__METHOD__);
+//    }
 }
