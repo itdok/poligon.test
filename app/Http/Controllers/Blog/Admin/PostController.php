@@ -34,7 +34,9 @@ class PostController extends BaseController
      */
     public function index()
     {
-        return view('blog.admin.posts.index');
+        $paginator = $this->blogPostRepository->getAllWithPaginate();
+
+        return view('blog.admin.posts.index', compact('paginator'));
     }
 
     /**
@@ -44,7 +46,7 @@ class PostController extends BaseController
      */
     public function create()
     {
-        //
+        dd(__METHOD__);
     }
 
     /**
@@ -77,7 +79,7 @@ class PostController extends BaseController
      */
     public function edit($id)
     {
-        //
+        dd(__METHOD__, $id);
     }
 
     /**
@@ -89,7 +91,7 @@ class PostController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        //
+        dd(__METHOD__, $request->all(), $id);
     }
 
     /**
@@ -100,6 +102,6 @@ class PostController extends BaseController
      */
     public function destroy($id)
     {
-        //
+        dd(__METHOD__, $id, request()->all());
     }
 }
